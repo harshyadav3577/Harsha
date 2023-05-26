@@ -32,13 +32,19 @@ stages:
   - job: InvokeAPIJob
     displayName: Invoke API Job
     steps:
-    - script: |
-        - script: |
-              # Bash script to invoke REST API
-              # Replace <API_ENDPOINT> with the actual API endpoint
-              # Making a GET request
-              curl -X GET <API_ENDPOINT>
+    - task: InvokeRestApi@1
+      displayName: 'Invoke GET Request'
+      inputs:
+        connectionType: 'connectedServiceName'  # Specify the Azure service connection to use
+        method: 'GET'
+        url: '<API_ENDPOINT>'  # Replace with the actual API endpoint URL
 
-              # Making a POST request with JSON payload
-              curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' <API_ENDPOINT>
-        echo "Invoking PEGA REST API"
+    - task: InvokeRestApi@1
+      displayName: 'Invoke POST Request'
+      inputs:
+        connectionType: 'connectedServiceName'  # Specify the Azure service connection to use
+        method: 'POST'
+        url: '<API_ENDPOINT>'  # Replace with the actual API endpoint URL
+        contentType: 'application/json'
+        body: '{"key": "value"}'  # Replace with the actual JSON payload
+
