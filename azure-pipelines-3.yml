@@ -7,9 +7,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  - name: API_KEY
-    value: <1234>
-variables:
+  - name: API_KEY, apiEndpoint
+    value: <1234>, <https://sandhata01.pegalabs.io/prweb>
     apiEndpoint: 'https://sandhata01.pegalabs.io/prweb'
     apiKey: $(1234)  # Replace with your API key variable
 
