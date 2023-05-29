@@ -9,6 +9,7 @@ pool:
 variables:
   - name: API_KEY
     value: <1234>
+variables:
     apiEndpoint: 'https://sandhata01.pegalabs.io/prweb'
     apiKey: $(1234)  # Replace with your API key variable
 
