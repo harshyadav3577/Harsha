@@ -1,0 +1,100 @@
+trigger:
+  branches:
+    include:
+      - main
+
+stages:
+- stage: Build
+  displayName: Build Stage
+  jobs:
+  - job: BuildJob
+    displayName: Build Job
+    steps:
+    - script: |
+        # Add script to build PEGA application here
+        ./path/to/build_script.sh
+        echo "Building PEGA application"
+
+- stage: Test
+  displayName: Run Tests
+  jobs:
+  - job: TestJob
+    displayName: Test Job
+    steps:
+    - script: |
+        # Add script to run tests here
+        echo "Running tests"
+    - script: echo "Tests completed"
+
+- stage: InvokeAPI
+  displayName: Invoke PEGA REST API
+  jobs:
+  - job: InvokeAPIJob
+    displayName: Invoke API Job
+    steps:
+    - script: |
+        - script: |
+              # Bash script to invoke REST API
+              # Replace <API_ENDPOINT> with the actual API endpoint
+              # Making a GET request
+              curl -X GET <API_ENDPOINT>
+
+              # Making a POST request with JSON payload
+              curl -X POST -H "Content-Type: application/json" -d '{"key": "value"}' <API_ENDPOINT>
+        echo "Invoking PEGA REST API"
+
+  - stage: InstallAgent
+    displayName: Install Azure Agent on VM
+    jobs:
+      - job: InstallAgentJob
+        displayName: Install Agent Job
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '3.x'
+              addToPath: true
+
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'YourAzureSubscription'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                # Install the Azure Pipelines Agent
+                curl -LsS https://aka.ms/InstallAzureCLIDeb | sudo bash
+                az extension add --name azure-devops
+
+                # Configure the Azure Pipelines Agent
+                az pipelines agent configure --agent $(hostname) --url $(System.CollectionUri) --auth pat --token $(System.AccessToken)
+
+                # Start the Azure Pipelines Agent
+                az pipelines agent start --agent $(hostname)
+
+          - script: |
+              # Wait for the agent to register
+              sleep 10
+
+- stage: DeployOnPrem
+  displayName: Deploy to Linux VMs
+  jobs:
+  - job: DeployJob
+    displayName: Deploy Job
+    steps:
+    - script: |
+        # Add script to deploy to Linux VMs here
+        echo "Deploying to Linux VMs"
+
+   - stage: Notify
+    displayName: Send Notification
+    dependsOn: Deploy
+    jobs:
+      - job: NotificationJob
+        displayName: Notification Job
+        steps:
+          - task: SendEmail@1
+            inputs:
+              subject: 'Deployment Completed'
+              body: 'The deployment to Linux VMs is completed successfully.'
+              to: 'harshyadav3577@gmail.com'
