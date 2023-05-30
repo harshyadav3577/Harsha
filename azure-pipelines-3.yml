@@ -20,5 +20,5 @@ steps:
     # e.g., npm install, pip install, etc.
 
     # Call the API using cURL or any other appropriate tool
-    curl -X GET https://sandhata01.pegalabs.io/prweb/PRRestService/DeploymentManager/v1/
+    curl -X GET -v https://sandhata01.pegalabs.io/prweb/PRRestService/DeploymentManager/v1/
   displayName: 'Invoke API'
