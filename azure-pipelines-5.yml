@@ -13,12 +13,12 @@ variables:
 steps:
 - script: |
     # Set the API endpoint and key as environment variables
-    #echo "##vso[task.setvariable variable=API_ENDPOINT]$(https://sandhata01.pegalabs.io/prweb)"
+    #echo "##vso[task.setvariable variable=API_ENDPOINT]$(https://www.google.com/)"
     #echo "##vso[task.setvariable variable=API_KEY]$(apiKey)"
 
     # Install necessary dependencies (if any)
     # e.g., npm install, pip install, etc.
 
     # Call the API using cURL or any other appropriate tool
-    curl -X GET -v https://sandhata01.pegalabs.io/prweb
+    curl -X GET -v https://www.google.com/
   displayName: 'Invoke API'
